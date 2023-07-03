@@ -1,0 +1,475 @@
+<!DOCTYPE html><html lang="zh-Cn" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>26-feapder框架部署 | Gayle Mood BLOG</title><meta name="author" content="Gayle Mood"><meta name="copyright" content="Gayle Mood"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="爬虫项目部署前期工作 1234567虚拟机安装（里面的镜像适用vm16）# xshell  下载链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1Y44erVDYgScE_fAEDhLAnQ提取码：fyum里面的    用户名  tuling   密码 root    mysql  用户名  root  密码 root   1 脚本文件部署linux内置的cron进程能帮我们实现这些需求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="26-feapder框架部署">
+<meta property="og:url" content="http://example.com/2023/07/03/26-feapder%E6%A1%86%E6%9E%B6%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Gayle Mood BLOG">
+<meta property="og:description" content="爬虫项目部署前期工作 1234567虚拟机安装（里面的镜像适用vm16）# xshell  下载链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1Y44erVDYgScE_fAEDhLAnQ提取码：fyum里面的    用户名  tuling   密码 root    mysql  用户名  root  密码 root   1 脚本文件部署linux内置的cron进程能帮我们实现这些需求">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/head_photo.png">
+<meta property="article:published_time" content="2023-07-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-03T09:05:56.212Z">
+<meta property="article:author" content="Gayle Mood">
+<meta property="article:tag" content="爬虫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/head_photo.png"><link rel="shortcut icon" href="/img/myself_image.jpg"><link rel="canonical" href="http://example.com/2023/07/03/26-feapder%E6%A1%86%E6%9E%B6%E9%83%A8%E7%BD%B2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '26-feapder框架部署',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-03 17:05:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/myself_image.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">29</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/head_photo.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Gayle Mood BLOG"><span class="site-name">Gayle Mood BLOG</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">26-feapder框架部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-07-03T09:05:56.212Z" title="Updated 2023-07-03 17:05:56">2023-07-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">3.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>11min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="26-feapder框架部署"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer", content="no-referrer" />
+
+<h2 id="爬虫项目部署"><a href="#爬虫项目部署" class="headerlink" title="爬虫项目部署"></a>爬虫项目部署</h2><p>前期工作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">虚拟机安装（里面的镜像适用vm16）</span><br><span class="line"># xshell  下载</span><br><span class="line">链接：https://pan.baidu.com/s/1Y44erVDYgScE_fAEDhLAnQ</span><br><span class="line">提取码：fyum</span><br><span class="line">里面的</span><br><span class="line">    用户名  tuling   密码 root</span><br><span class="line">    mysql  用户名  root  密码 root</span><br></pre></td></tr></table></figure>
+
+<p><a name="0e38b1c4"></a></p>
+<h3 id="1-脚本文件部署"><a href="#1-脚本文件部署" class="headerlink" title="1 脚本文件部署"></a>1 脚本文件部署</h3><p><code>linux</code>内置的<code>cron</code>进程能帮我们实现这些需求，<code>cron</code>搭配<code>shell</code>脚本，非常复杂的指令也没有问题。</p>
+<p><a name="d709e731"></a></p>
+<h4 id="1-1-crontab的使用"><a href="#1-1-crontab的使用" class="headerlink" title="1.1 crontab的使用"></a>1.1 <code>crontab</code>的使用</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">crontab [-u username]　　　　//省略用户表表示操作当前用户的crontab</span><br><span class="line">    -e      (编辑工作表)</span><br><span class="line">    -l      (列出工作表里的命令)</span><br><span class="line">    -r      (删除工作)</span><br></pre></td></tr></table></figure>
+
+<p>我们用<strong>crontab -e</strong>进入当前用户的工作表编辑，是常见的vim界面。每行是一条命令。</p>
+<p><code>crontab</code>的命令构成为 时间+动作，其时间有<strong>分、时、日、月、周</strong>五种，操作符有</p>
+<ul>
+<li><ul>
+<li>取值范围内的所有数字</li>
+</ul>
+</li>
+<li><strong>&#x2F;</strong> 每过多少个数字</li>
+<li><strong>-</strong> 从X到Z</li>
+<li><strong>，</strong>散列数字<table>
+<thead>
+<tr>
+<th>代表意义</th>
+<th>分钟</th>
+<th>小时</th>
+<th>日期</th>
+<th>月份</th>
+<th>周</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数字范围</td>
+<td>0~59</td>
+<td>0~23</td>
+<td>1~31</td>
+<td>1~12</td>
+<td>0~6</td>
+<td>就命令</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<p><a name="bcbb3c96"></a></p>
+<h4 id="1-2-为当前用户创建-cron-服务"><a href="#1-2-为当前用户创建-cron-服务" class="headerlink" title="1.2  为当前用户创建**cron**服务"></a>1.2  <strong>为当前用户创建</strong><code>**cron**</code><strong>服务</strong></h4><ul>
+<li>可以键入 <code>crontab -e</code>编辑<code>crontab</code>服务文件</li>
+</ul>
+<p><strong>举例：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * *      <span class="comment">#每分钟都执行</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实例1:每5分钟执行一次文档写入</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*/<span class="number">1</span> * * * * echo <span class="string">&#x27;hello world&#x27;</span> &gt;&gt; /home/poppies/Documents/xialuo/ps/demo.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>实例2：每小时的第3和第15分钟执行</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3</span>,<span class="number">15</span> * * * *  echo <span class="string">&#x27;hello world&#x27;</span> &gt;&gt; /home/xxoo/demo/demo.log</span><br></pre></td></tr></table></figure>
+
+<p><strong>实例：在上午8点的20分钟执行</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">20</span> <span class="number">8</span> * * * myCommand</span><br></pre></td></tr></table></figure>
+
+<p><a name="3a64a1ac"></a></p>
+<h4 id="1-3-单个脚本使用定时任务部署"><a href="#1-3-单个脚本使用定时任务部署" class="headerlink" title="1.3  单个脚本使用定时任务部署"></a>1.3  单个脚本使用定时任务部署</h4><p><a name="dc50d999"></a></p>
+<h5 id="1-3-1-上传本地文件到服务器"><a href="#1-3-1-上传本地文件到服务器" class="headerlink" title="1.3.1 上传本地文件到服务器"></a>1.3.1 上传本地文件到服务器</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp /path/filename username@servername:/path</span><br><span class="line">scp env_ps.py poppies@<span class="number">192.168</span><span class="number">.65</span><span class="number">.232</span>:/home/poppies/Documents/xialuo/ps</span><br></pre></td></tr></table></figure>
+
+<p><a name="1290fde6"></a></p>
+<h5 id="1-3-2-定时采集任务"><a href="#1-3-2-定时采集任务" class="headerlink" title="1.3.2 定时采集任务"></a>1.3.2 定时采集任务</h5><p>1、使用定时任务启动 每5分钟采集一次数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*/<span class="number">5</span> * * * *  python /home/poppies/Documents/xialuo/ps/env_ps.py spider &gt;&gt; /home/poppies/Documents/xialuo/demo/demo.log</span><br></pre></td></tr></table></figure>
+
+<p><a name="2c573caf"></a></p>
+<h3 id="2-使用scrapyd部署"><a href="#2-使用scrapyd部署" class="headerlink" title="2 使用scrapyd部署"></a>2 使用<code>scrapyd</code>部署</h3><p><a name="bd0c50bd"></a></p>
+<h4 id="2-1-环境安装"><a href="#2-1-环境安装" class="headerlink" title="2.1 环境安装"></a>2.1 环境安装</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapyd</span><br><span class="line">pip install scrapyd-client</span><br></pre></td></tr></table></figure>
+
+<p>官网：<a target="_blank" rel="noopener" href="https://scrapyd.readthedocs.io/en/stable/overview.html">https://scrapyd.readthedocs.io/en/stable/overview.html</a></p>
+<p>由于<code>window</code>兼容性问题，所以<code>scrapyd-deploy</code>无法支持</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:<span class="keyword">\software</span><span class="keyword">\inters</span><span class="keyword">\python</span>3<span class="keyword">\Scripts</span></span><br></pre></td></tr></table></figure>
+
+<p>修改 <code>scrapyd-deploy.bat</code>格式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@echo off</span></span><br><span class="line"><span class="string">&quot;D:\software\inters\python3\Scripts\python.exe&quot;</span> <span class="string">&quot;D:\software\inters\python3\Scripts\scrapyd-deploy&quot;</span> % *</span><br></pre></td></tr></table></figure>
+
+<p>执行 <code>scrapyd-deploy -l</code> 看到以下</p>
+<p><img src="/images%5Cimage-20220921163146603.png#id=OBlkd&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></p>
+<p><a name="60c1d619"></a></p>
+<h4 id="2-2-查询状态"><a href="#2-2-查询状态" class="headerlink" title="2.2 查询状态"></a>2.2 <strong>查询状态</strong></h4><p>这个接口负责查看 <code>Scrapyd</code> 当前服务和任务的状态，我们可以用 <code>curl</code>命令来请求这个接口，命令如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6800</span>/daemonstatus.json</span><br></pre></td></tr></table></figure>
+
+<p><a name="a9f73fd0"></a></p>
+<h4 id="2-3-爬虫部署"><a href="#2-3-爬虫部署" class="headerlink" title="2.3 爬虫部署"></a>2.3 爬虫部署</h4><p>1、把原先注释掉的<code>url</code>那一行取消注释，这个就是我们要部署到目标服务器的地址，<br />2、 把[deploy]这里改为[deploy:xl]，这里是命名为xl，命名可以任意怎么都可以，只要能标识出来项目就可以。<br />下边的project 就是我们的工程名，到此配置文件更改完成。</p>
+<p><a name="8c3e91e2"></a></p>
+<h5 id="2-3-1-发布项目"><a href="#2-3-1-发布项目" class="headerlink" title="2.3.1 发布项目"></a>2.3.1 发布项目</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这里target 为你的服务器命令，prject是你工程的名字，发布工程之前我们的scrapyd.cfg必须修改</span></span><br><span class="line"><span class="comment"># scrapyd-deploy 部署名 -p 工程名称</span></span><br><span class="line">scrapyd-deploy ps -p xialuo</span><br></pre></td></tr></table></figure>
+
+<p><a name="46c04168"></a></p>
+<h5 id="2-3-2-启动爬虫"><a href="#2-3-2-启动爬虫" class="headerlink" title="2.3.2 启动爬虫"></a>2.3.2 <strong>启动爬虫</strong></h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PROJECT_NAME填入你爬虫工程的名字，SPIDER_NAME填入你爬虫的名字</span></span><br><span class="line">curl http://localhost:<span class="number">6800</span>/schedule.json -d project=xialuo -d spider=ps</span><br></pre></td></tr></table></figure>
+
+<p><a name="45946160"></a></p>
+<h5 id="2-3-3-停止爬虫"><a href="#2-3-3-停止爬虫" class="headerlink" title="2.3.3 停止爬虫"></a>2.3.3 <strong>停止爬虫</strong></h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:<span class="number">6800</span>/cancel.json -d project=huya -d job=86a3dd29d51811eca18f000ec6599497</span><br></pre></td></tr></table></figure>
+
+<p><a name="61713bd9"></a></p>
+<h5 id="2-3-4-查看当前项目"><a href="#2-3-4-查看当前项目" class="headerlink" title="2.3.4 查看当前项目"></a>2.3.4 查看当前项目</h5><figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:6800/listprojects.json</span><br></pre></td></tr></table></figure>
+
+<p><a name="41a435fc"></a></p>
+<h5 id="2-3-4-查看详情"><a href="#2-3-4-查看详情" class="headerlink" title="2.3.4 查看详情"></a>2.3.4 <strong>查看详情</strong></h5><figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listjobs.json?project=xialuo</span><br></pre></td></tr></table></figure>
+
+<p><a name="dd054773"></a></p>
+<h5 id="2-3-5-交互调试"><a href="#2-3-5-交互调试" class="headerlink" title="2.3.5 交互调试"></a>2.3.5 交互调试</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">data = &#123;&#125;</span><br><span class="line">data[<span class="string">&#x27;project&#x27;</span>] = <span class="string">&#x27;huya&#x27;</span></span><br><span class="line">data[<span class="string">&#x27;spider&#x27;</span>] = <span class="string">&#x27;hh&#x27;</span></span><br><span class="line">url = <span class="string">&#x27;http://127.0.0.1:6800/schedule.json&#x27;</span></span><br><span class="line">res = requests.post(url,data)</span><br><span class="line">res.json()  <span class="comment"># 获取数据   返回jobid</span></span><br><span class="line"><span class="built_in">print</span>(res.json())</span><br><span class="line"><span class="comment"># 1b51dd0ac37e11ea8543000c29c350ab</span></span><br><span class="line"><span class="comment"># 停止</span></span><br><span class="line">datas = &#123;&#125;</span><br><span class="line">datas[<span class="string">&#x27;project&#x27;</span>] = <span class="string">&#x27;xialuo&#x27;</span></span><br><span class="line">datas[<span class="string">&#x27;job&#x27;</span>] = res.json()[<span class="string">&#x27;jobid&#x27;</span>]</span><br><span class="line">res = requests.post(<span class="string">&#x27;http://127.0.0.1:6800/cancel.json&#x27;</span>,data)</span><br><span class="line"><span class="built_in">print</span>(res.text)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(requests.get(<span class="string">&#x27;http://localhost:6800/listjobs.json?project=huya&#x27;</span>).text)</span><br></pre></td></tr></table></figure>
+
+<p><a name="dfc63106"></a></p>
+<h3 id="3-Gerapy爬虫部署"><a href="#3-Gerapy爬虫部署" class="headerlink" title="3 Gerapy爬虫部署"></a>3 <code>Gerapy</code>爬虫部署</h3><pre><code>    是一个**基于**`**Scrapyd**`**，**`**Scrapyd API**`**，**`**Django**`**，**`**Vue.js**`**搭建的分布式爬虫管理框架**。简单点说，就是用上述的`Scrapyd`工具是在命令行进行操作，而`Gerapy`将命令行和图形界面进行了对接，我们只需要点击按钮就可完成部署，启动，停止，删除的操作。
+</code></pre>
+<p><a name="ccc3ab1d"></a></p>
+<h4 id="3-1-环境安装"><a href="#3-1-环境安装" class="headerlink" title="3.1 环境安装"></a>3.1 <strong>环境安装</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install gerapy</span><br></pre></td></tr></table></figure>
+
+<p>一、创建新项目</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　gerapy init</span><br></pre></td></tr></table></figure>
+
+<p>二、对数据库初始化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gerapy migrate      <span class="comment">#   gerapy ==&gt; python manage.py</span></span><br></pre></td></tr></table></figure>
+
+<p>三、启动gerapy服务</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gerapy runserver</span><br></pre></td></tr></table></figure>
+
+<p>四、创建用户名密码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gerapy createsuperuser</span><br></pre></td></tr></table></figure>
+
+<p><a name="d71cd552"></a></p>
+<h4 id="3-2-项目部署"><a href="#3-2-项目部署" class="headerlink" title="3.2 项目部署"></a>3.2 项目部署</h4><p><a name="ad35d264"></a></p>
+<h5 id="3-2-1-界面展示"><a href="#3-2-1-界面展示" class="headerlink" title="3.2.1  界面展示"></a>3.2.1  界面展示</h5><p><img src="/images%5Cimage-20220921213145605.png#id=nPyIH&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></p>
+<p><a name="a7e59c14"></a></p>
+<h5 id="3-2-2-爬虫部署"><a href="#3-2-2-爬虫部署" class="headerlink" title="3.2.2 爬虫部署"></a>3.2.2 爬虫部署</h5><p>1、打包上传</p>
+<p>2、复制代码到包即可</p>
+<p><a name="4dd9f4e9"></a></p>
+<h3 id="4-docker容器"><a href="#4-docker容器" class="headerlink" title="4 docker容器"></a>4 docker容器</h3><p><a name="9d6b4553"></a></p>
+<h4 id="4-1-docker简介"><a href="#4-1-docker简介" class="headerlink" title="4.1 docker简介"></a>4.1 docker简介</h4><p>打包：docker打包就是把软件运行需要的依赖、第三方库、软件打包放到一起，变成一个安装包</p>
+<p>分发：可以把打包的安装包上传到仓库、其他人可以下载使用</p>
+<p>部署：就是把安装包使用命令运行起来你的应用，自动模拟环境。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Docker是开发人员和系统管理员使用容器开发、部署和运行应用程序的平台。使用Linux容器来部署应用程序称为集装箱化。使用docker轻松部署应用程序</span><br></pre></td></tr></table></figure>
+
+<p>集装箱化的优点：</p>
+<ul>
+<li>灵活：即使是复杂的应用程序也可封装。</li>
+<li>轻量级：容器利用并共享主机内核。</li>
+<li>便携式：您可以在本地构建，部署到云上并在任何地方运行。</li>
+<li>可扩展性：您可以增加和自动分发容器副本。</li>
+<li>可堆叠：您可以垂直堆叠服务并及时并及时堆叠服务。</li>
+</ul>
+<p><a name="935c7e75"></a></p>
+<h4 id="4-2-虚拟机virtual-machine"><a href="#4-2-虚拟机virtual-machine" class="headerlink" title="4.2 虚拟机virtual machine"></a>4.2 虚拟机virtual machine</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">虚拟机(virtual machine)就是带环境安装的一种解决方案。它可以在一种操作系统里面运行另一种操作系统，比如在Windows系统里面运行Linux系统。应用程序对此毫无感知，因为虚拟机看上去跟真丝系统一模一样，而对于底层系统来说，虚拟机就是一个普通文件，不需要了就删掉，对其它部分毫无影响。</span><br></pre></td></tr></table></figure>
+
+<p><strong>虚拟机的缺点：</strong></p>
+<ul>
+<li><strong>资源占用多：</strong>虚拟机会独占一部分内存和硬盘空间。它运行的时候，其他程序就不能使用这些资源了。哪怕虚拟机里面的应用程序，真正使用的内存只有1M，虚拟机依然需要几百MB的内容才能运行。</li>
+<li><strong>冗余步骤多：</strong>虚拟机是完整的操作系统，一些系统级别的操作步骤，往往无法跳过，比如用户登录。</li>
+<li><strong>启动慢：</strong>启动操作系统需要多久，启动虚拟机就需要多久。可能要等几分钟，应用陈故乡才能真正运行。</li>
+</ul>
+<p><a name="ce9e283a"></a></p>
+<h4 id="4-3-容器和虚拟机比较"><a href="#4-3-容器和虚拟机比较" class="headerlink" title="4.3 容器和虚拟机比较"></a>4.3 容器和虚拟机比较</h4><p>一个容器中运行原生Linux和共享主机与其它容器的内核，它运行一个独立的进程，不占用任何其它可执行文件的内存，使其轻量化。</p>
+<p>相比之下，虚拟机(VM)运行一个完整的“客户”操作系统，通过虚拟机管理程序虚拟访问主机资源。一般来说，虚拟机提供的环境比大多数应用程序需要的资源多。</p>
+<p><img src="https://images2018.cnblogs.com/blog/1011251/201806/1011251-20180610171525142-1923858765.png#id=XaTlS&originHeight=582&originWidth=1416&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></p>
+<ul>
+<li>dockerfile       就是源代码 </li>
+<li>image          镜像   可执行的程序   ubuntu  mysql  redis    nginx   elesticsearch   网站打包成镜像 </li>
+<li>container    运行的进程</li>
+</ul>
+<p>学习地址：<a target="_blank" rel="noopener" href="https://www.runoob.com/docker/docker-tutorial.html">https://www.runoob.com/docker/docker-tutorial.html</a></p>
+<p><a name="c7d7926a"></a></p>
+<h4 id="4-4-docker安装"><a href="#4-4-docker安装" class="headerlink" title="4.4 docker安装"></a>4.4 docker安装</h4><p>下载地址：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a> </li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/install/ubuntu/">https://docs.docker.com/desktop/install/ubuntu/</a></li>
+</ul>
+<p>卸载旧版本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum remove docker  docker-common docker-selinux docker-engine</span><br></pre></td></tr></table></figure>
+
+<p>安装</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2 &amp;&amp; python2 /usr/<span class="built_in">bin</span>/yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo &amp;&amp; yum install docker-ce -y</span><br></pre></td></tr></table></figure>
+
+<p>启动</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+
+<p><a name="dbe3fdc5"></a></p>
+<h4 id="4-5-镜像使用"><a href="#4-5-镜像使用" class="headerlink" title="4.5 镜像使用"></a>4.5 镜像使用</h4><p><a name="9dd7c4b6"></a></p>
+<h5 id="4-5-1-镜像列举"><a href="#4-5-1-镜像列举" class="headerlink" title="4.5.1 镜像列举"></a>4.5.1 镜像列举</h5><p><strong>docker images</strong> 来列出本地主机上的镜像。</p>
+<p><img src="/images%5Cimage-20220922194002270.png#id=U7W0G&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></p>
+<p>各个选项说明:</p>
+<ul>
+<li><strong>REPOSITORY：</strong>表示镜像的仓库源</li>
+<li><strong>TAG：</strong>镜像的标签</li>
+<li><strong>IMAGE ID：</strong>镜像ID</li>
+<li><strong>CREATED：</strong>镜像创建时间</li>
+<li><strong>SIZE：</strong>镜像大小</li>
+</ul>
+<p><a name="1a41673f"></a></p>
+<h5 id="4-5-2-获取一个新的镜像"><a href="#4-5-2-获取一个新的镜像" class="headerlink" title="4.5.2 获取一个新的镜像"></a>4.5.2 获取一个新的镜像</h5><p>当我们在本地主机上使用一个不存在的镜像时 Docker 就会自动下载这个镜像。如果我们想预先下载这个镜像，我们可以使用 docker pull 命令来下载它。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu</span><br></pre></td></tr></table></figure>
+
+<p><a name="c4785085"></a></p>
+<h5 id="4-5-3-查找镜像"><a href="#4-5-3-查找镜像" class="headerlink" title="4.5.3 查找镜像"></a>4.5.3 查找镜像</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search ubuntu</span><br></pre></td></tr></table></figure>
+
+<p><a name="c49f4e66"></a></p>
+<h5 id="4-5-4-删除镜像"><a href="#4-5-4-删除镜像" class="headerlink" title="4.5.4 删除镜像"></a>4.5.4 删除镜像</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi ubuntu</span><br></pre></td></tr></table></figure>
+
+<p><a name="defeef45"></a></p>
+<h4 id="4-6-容器使用"><a href="#4-6-容器使用" class="headerlink" title="4.6 容器使用"></a>4.6 容器使用</h4><p><a name="c1636790"></a></p>
+<h5 id="4-6-1-镜像查找"><a href="#4-6-1-镜像查找" class="headerlink" title="4.6.1 镜像查找"></a>4.6.1 镜像查找</h5><p>官方地址：<a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com/</a></p>
+<p>镜像下载</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu</span><br></pre></td></tr></table></figure>
+
+<p><a name="31553b66"></a></p>
+<h5 id="4-6-2-容器操作"><a href="#4-6-2-容器操作" class="headerlink" title="4.6.2 容器操作"></a>4.6.2 容器操作</h5><p>以下命令使用 ubuntu 镜像启动一个容器，参数为以命令行模式进入该容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it ubuntu /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<ul>
+<li><strong>-i</strong>: 交互式操作。</li>
+<li><strong>-t</strong>: 终端。</li>
+<li><strong>ubuntu</strong>: ubuntu 镜像。</li>
+<li><strong>&#x2F;bin&#x2F;bash</strong>：放在镜像名后的是命令，这里我们希望有个交互式 Shell，因此用的是 &#x2F;bin&#x2F;bash。</li>
+</ul>
+<p>查看所有的容器命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+
+<p>使用 docker start 启动一个已停止的容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start &lt;容器 ID&gt;</span><br></pre></td></tr></table></figure>
+
+<p>使用 docker stop 停止一个容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop &lt;容器 ID&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>exec 命令</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it  &lt;容器 ID&gt; /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>删除容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f  &lt;容器 ID&gt;</span><br></pre></td></tr></table></figure>
+
+<p>运行一个 web 应用</p>
+<ul>
+<li>我们将在docker容器中运行一个 Python Flask 应用来运行一个web应用</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo  docker pull training/webapp </span><br><span class="line">sudo docker run -d -P training/webapp python app.py</span><br></pre></td></tr></table></figure>
+
+<p>参数说明:</p>
+<ul>
+<li>**-d:**让容器在后台运行。</li>
+<li>**-P:**将容器内部使用的网络端口随机映射到我们使用的主机上。</li>
+</ul>
+<p><img src="/images%5Cimage-20220922193414906.png#id=JjnN7&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></p>
+<p><strong>注</strong>：Docker 开放了 5000 端口（默认 Python Flask 端口）映射到主机端口 49153上。</p>
+<p>这时我们可以通过浏览器访问<code>http://192.168.65.232:49153/</code></p>
+<p>我们也可以通过 -p 参数来设置不一样的端口：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d -p 5000:5000 training/webapp python app.py</span><br></pre></td></tr></table></figure>
+
+<p><strong>注</strong>：容器内部的 5000 端口映射到我们本地主机的 5000 端口上。</p>
+<p><a name="8b36305d"></a></p>
+<h3 id="5-爬虫简历分享"><a href="#5-爬虫简历分享" class="headerlink" title="5 爬虫简历分享"></a>5 爬虫简历分享</h3><p><strong>简历的作用：</strong></p>
+<p>1.通过简历筛选关，获得笔面试资格</p>
+<p>2.面试时，简历是面试官与你交谈的基础</p>
+<p><strong>通过简历筛选</strong>：</p>
+<p><strong>一、简历主要筛选哪些项</strong></p>
+<p><strong>1.关键技能是否匹配</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">关键技能的匹配项是否足够。</span><br><span class="line"></span><br><span class="line">比如要求：爬虫设计，数据库，自动化工具，网络抓包工具，逆向分析能力</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.项目经验要求</strong></p>
+<pre><code> 年限要求
+
+ 相应行业，相应项目。比如 电商行业、金融行业、旅游行业
+
+ 有的有 做过XXX的优先
+</code></pre>
+<p><strong>3.学历</strong></p>
+<p><strong>4.跳槽频率</strong></p>
+<p><strong>5.简历亮点</strong></p>
+<p><strong>总结：</strong></p>
+<p>投不同公司的不同职位，先了解该职位的技能要求和公司的行业属性。</p>
+<p>修改技能，让关键技能更匹配。</p>
+<p>把与公司行业相关的项目经验重点描述与位置提前。</p>
+<p><strong>项目经验写法：</strong></p>
+<p>主要展示你工作经验足（做的项目多，做的项目类型多（电商 旅游 工商等等都抓过。APP 网页都抓过））</p>
+<p>细化你个人技能中描述的技能，加以佐证你的个人技能。</p>
+<p>重复项目建议合并。（同类型的（比如天眼查&#x2F;企查查）、（技能重复的合并 几年经验项目全都是一个技能栈 会被认为没长进）</p>
+<p><strong>每个项目的措辞：</strong></p>
+<p>每一个项目写成一个3-5句逻辑连贯，有意义的话，不要用短语。</p>
+<p><strong>第一句：</strong>问题&#x2F;背景，突出复杂性</p>
+<p><strong>第二句：</strong>我独立使用（负责）某方法&#x2F;技巧。突出你的技术</p>
+<p><strong>第三句：</strong>达成的成绩。突出你的成果。</p>
+<p><strong>体现你的能力</strong></p>
+<p>比如：</p>
+<p><strong>1.）体现你的爬虫设计与优化能力</strong></p>
+<ul>
+<li>公司现有爬虫性能较差，每天只能日抓30万张页面，我负责把爬虫重构成异步爬虫，并优化网络性能，让单台低配置机器定向抓取200百万张页面 </li>
+<li>公司现有爬虫性能较差，只能日抓30万张页面，我用10天时间重构为异步爬虫，并优化网络性能与重新设计抓取策略，让单台低配置机器定向抓取200百万张页面，后负责维护该爬虫。</li>
+</ul>
+<p><strong>2.）体现技能方面</strong></p>
+<ul>
+<li>运用KKK方法破解XXX网&#x2F;OOO网&#x2F;PPP网的JS反爬，后成为公司破解JS反爬方面的生力军。</li>
+</ul>
+<p><strong>3.）综合技能运用</strong></p>
+<p><strong>对比改前：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">**项目经验：**</span><br><span class="line"></span><br><span class="line">	所用技术：Redis + MongoDB + requests</span><br><span class="line"></span><br><span class="line">	使用requests库请求网页</span><br></pre></td></tr></table></figure>
+
+<pre><code>     用redis做缓存管理
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">使用MongoDB存储网页</span><br><span class="line"></span><br><span class="line">用打码平台解决验证码，滑块问题。</span><br></pre></td></tr></table></figure>
+
+<p><strong>改后：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">设计爬虫对天眼查进行抓取</span><br><span class="line"></span><br><span class="line">综合运用社会工程手段（打码，大规模IP等）绕过天眼查的账号登陆，滑块验证。</span><br><span class="line"></span><br><span class="line">借助redis做异步队列，把抓取数据刷入mongo做持久化存储，爬虫可达到XX百万（XX十万抓取量）</span><br></pre></td></tr></table></figure>
+
+<p><strong>简历与面试禁忌：</strong></p>
+<p>1.不要在简历写诸如：我可以无偿加班 我吃苦耐劳之类过头的话。</p>
+<p>2.少写精通两字。</p>
+<p>3.别在面试中把待遇福利细节问得很细（通知你被录入时，再跟行政详细询问）</p>
+<p>4.不会的问题 就回答不会，不要乱扯。</p>
+<p>5.简历内容过于夸张，面试时缺一问三不知。</p>
+<p>6.简历上的逻辑要自洽 工作时间 描述事实要自洽。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">Gayle Mood</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2023/07/03/26-feapder%E6%A1%86%E6%9E%B6%E9%83%A8%E7%BD%B2/">http://example.com/2023/07/03/26-feapder%E6%A1%86%E6%9E%B6%E9%83%A8%E7%BD%B2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a></div><div class="post_share"><div class="social-share" data-image="/img/head_photo.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2023/07/03/25-scrapy-redis/" title="25-Scrapy-Redis"><img class="cover" src="/img/head_photo.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">25-Scrapy-Redis</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/07/03/1-%E7%88%AC%E8%99%AB%E5%8E%9F%E7%90%86/" title="1-爬虫原理"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">1-爬虫原理</div></div></a></div><div><a href="/2023/07/03/2-HHTP%E8%AF%B7%E6%B1%82%E6%A8%A1%E5%9D%97/" title="2-HTTP请求模块"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">2-HTTP请求模块</div></div></a></div><div><a href="/2023/07/03/3-%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" title="3-数据解析"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">3-数据解析</div></div></a></div><div><a href="/2023/07/03/4-%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" title="4-数据存储"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">4-数据存储</div></div></a></div><div><a href="/2023/07/03/5-ajax%E5%8A%A8%E6%80%81%E9%87%87%E9%9B%86/" title="5-ajax动态采集"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">5-ajax动态采集</div></div></a></div><div><a href="/2023/07/03/6-%E5%A4%9A%E4%BB%BB%E5%8A%A1%E6%8F%90%E9%80%9F/" title="6-多任务提速"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">6-多任务提速</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/myself_image.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Gayle Mood</div><div class="author-info__description">Python练习生（练习时长一年半）</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">29</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/clkyyds"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://res.abeim.cn/api/qq/?qq=1269041573" target="_blank" title="icon-QQ"><i class="fab fa-qq" style="color: faa-tada;"></i></a><a class="social-icon" href="mailto:1269041573@qq.com" target="_blank" title="icon-youxiang"><i class="fas fa-envelope" style="color: faa-tada;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%AC%E8%99%AB%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2"><span class="toc-number">1.</span> <span class="toc-text">爬虫项目部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%84%9A%E6%9C%AC%E6%96%87%E4%BB%B6%E9%83%A8%E7%BD%B2"><span class="toc-number">1.1.</span> <span class="toc-text">1 脚本文件部署</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-crontab%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 crontab的使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-%E4%B8%BA%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E5%88%9B%E5%BB%BA-cron-%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2  为当前用户创建**cron**服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-%E5%8D%95%E4%B8%AA%E8%84%9A%E6%9C%AC%E4%BD%BF%E7%94%A8%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E9%83%A8%E7%BD%B2"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3  单个脚本使用定时任务部署</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-3-1-%E4%B8%8A%E4%BC%A0%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">1.3.1 上传本地文件到服务器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-3-2-%E5%AE%9A%E6%97%B6%E9%87%87%E9%9B%86%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">1.3.2 定时采集任务</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8scrapyd%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.</span> <span class="toc-text">2 使用scrapyd部署</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 环境安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E6%9F%A5%E8%AF%A2%E7%8A%B6%E6%80%81"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 查询状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-%E7%88%AC%E8%99%AB%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 爬虫部署</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-1-%E5%8F%91%E5%B8%83%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">2.3.1 发布项目</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-2-%E5%90%AF%E5%8A%A8%E7%88%AC%E8%99%AB"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">2.3.2 启动爬虫</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-3-%E5%81%9C%E6%AD%A2%E7%88%AC%E8%99%AB"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">2.3.3 停止爬虫</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-4-%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">2.3.4 查看当前项目</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-4-%E6%9F%A5%E7%9C%8B%E8%AF%A6%E6%83%85"><span class="toc-number">1.2.3.5.</span> <span class="toc-text">2.3.4 查看详情</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-5-%E4%BA%A4%E4%BA%92%E8%B0%83%E8%AF%95"><span class="toc-number">1.2.3.6.</span> <span class="toc-text">2.3.5 交互调试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Gerapy%E7%88%AC%E8%99%AB%E9%83%A8%E7%BD%B2"><span class="toc-number">1.3.</span> <span class="toc-text">3 Gerapy爬虫部署</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 环境安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 项目部署</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-1-%E7%95%8C%E9%9D%A2%E5%B1%95%E7%A4%BA"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">3.2.1  界面展示</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-2-%E7%88%AC%E8%99%AB%E9%83%A8%E7%BD%B2"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">3.2.2 爬虫部署</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-docker%E5%AE%B9%E5%99%A8"><span class="toc-number">1.4.</span> <span class="toc-text">4 docker容器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-docker%E7%AE%80%E4%BB%8B"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 docker简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E8%99%9A%E6%8B%9F%E6%9C%BAvirtual-machine"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 虚拟机virtual machine</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-%E5%AE%B9%E5%99%A8%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%AF%94%E8%BE%83"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 容器和虚拟机比较</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-docker%E5%AE%89%E8%A3%85"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4 docker安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-%E9%95%9C%E5%83%8F%E4%BD%BF%E7%94%A8"><span class="toc-number">1.4.5.</span> <span class="toc-text">4.5 镜像使用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#4-5-1-%E9%95%9C%E5%83%8F%E5%88%97%E4%B8%BE"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">4.5.1 镜像列举</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-5-2-%E8%8E%B7%E5%8F%96%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E9%95%9C%E5%83%8F"><span class="toc-number">1.4.5.2.</span> <span class="toc-text">4.5.2 获取一个新的镜像</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-5-3-%E6%9F%A5%E6%89%BE%E9%95%9C%E5%83%8F"><span class="toc-number">1.4.5.3.</span> <span class="toc-text">4.5.3 查找镜像</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-5-4-%E5%88%A0%E9%99%A4%E9%95%9C%E5%83%8F"><span class="toc-number">1.4.5.4.</span> <span class="toc-text">4.5.4 删除镜像</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-6-%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8"><span class="toc-number">1.4.6.</span> <span class="toc-text">4.6 容器使用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#4-6-1-%E9%95%9C%E5%83%8F%E6%9F%A5%E6%89%BE"><span class="toc-number">1.4.6.1.</span> <span class="toc-text">4.6.1 镜像查找</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-6-2-%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">1.4.6.2.</span> <span class="toc-text">4.6.2 容器操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%88%AC%E8%99%AB%E7%AE%80%E5%8E%86%E5%88%86%E4%BA%AB"><span class="toc-number">1.5.</span> <span class="toc-text">5 爬虫简历分享</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/Apple%20%E7%BE%8E%E5%8C%BA%E8%B4%A6%E5%8F%B7%E6%B3%A8%E5%86%8C/" title="Apple 美区账号注册"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Apple 美区账号注册"/></a><div class="content"><a class="title" href="/2023/07/03/Apple%20%E7%BE%8E%E5%8C%BA%E8%B4%A6%E5%8F%B7%E6%B3%A8%E5%86%8C/" title="Apple 美区账号注册">Apple 美区账号注册</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/Butterfly/" title="Butterfly"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Butterfly"/></a><div class="content"><a class="title" href="/2023/07/03/Butterfly/" title="Butterfly">Butterfly</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/" title="hexo + github 搭建博客网站"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hexo + github 搭建博客网站"/></a><div class="content"><a class="title" href="/2023/07/03/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/" title="hexo + github 搭建博客网站">hexo + github 搭建博客网站</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/1-%E7%88%AC%E8%99%AB%E5%8E%9F%E7%90%86/" title="1-爬虫原理"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="1-爬虫原理"/></a><div class="content"><a class="title" href="/2023/07/03/1-%E7%88%AC%E8%99%AB%E5%8E%9F%E7%90%86/" title="1-爬虫原理">1-爬虫原理</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/2-HHTP%E8%AF%B7%E6%B1%82%E6%A8%A1%E5%9D%97/" title="2-HTTP请求模块"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2-HTTP请求模块"/></a><div class="content"><a class="title" href="/2023/07/03/2-HHTP%E8%AF%B7%E6%B1%82%E6%A8%A1%E5%9D%97/" title="2-HTTP请求模块">2-HTTP请求模块</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/head_photo.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Gayle Mood</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

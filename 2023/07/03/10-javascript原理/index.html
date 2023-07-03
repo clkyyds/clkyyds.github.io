@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="zh-Cn" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>10-javescript原理 | Gayle Mood BLOG</title><meta name="author" content="Gayle Mood"><meta name="copyright" content="Gayle Mood"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="javascript调试 1. 浏览器面板补充 Elements Network 保留日志  勾选每次刷新不会清除之前的请求   停用缓存  勾选后不会从缓存里面拉数据，方便后续JS动态调试     Sources page ： 所有资源文件   filesystem： 关联本地文件   overrides：  可以做文件替换，比如替换JS   代码段：可以编写脚本，影响页面,代码记录 12v">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10-javescript原理">
+<meta property="og:url" content="http://example.com/2023/07/03/10-javascript%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Gayle Mood BLOG">
+<meta property="og:description" content="javascript调试 1. 浏览器面板补充 Elements Network 保留日志  勾选每次刷新不会清除之前的请求   停用缓存  勾选后不会从缓存里面拉数据，方便后续JS动态调试     Sources page ： 所有资源文件   filesystem： 关联本地文件   overrides：  可以做文件替换，比如替换JS   代码段：可以编写脚本，影响页面,代码记录 12v">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/head_photo.png">
+<meta property="article:published_time" content="2023-07-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-03T08:51:45.789Z">
+<meta property="article:author" content="Gayle Mood">
+<meta property="article:tag" content="爬虫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/head_photo.png"><link rel="shortcut icon" href="/img/myself_image.jpg"><link rel="canonical" href="http://example.com/2023/07/03/10-javascript%E5%8E%9F%E7%90%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '10-javescript原理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-03 16:51:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/myself_image.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">29</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/head_photo.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Gayle Mood BLOG"><span class="site-name">Gayle Mood BLOG</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">10-javescript原理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-07-03T08:51:45.789Z" title="Updated 2023-07-03 16:51:45">2023-07-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>8min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="10-javescript原理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer", content="no-referrer" />
+
+<h2 id="javascript调试"><a href="#javascript调试" class="headerlink" title="javascript调试"></a>javascript调试</h2><p><a name="3f10ab6c"></a></p>
+<h3 id="1-浏览器面板补充"><a href="#1-浏览器面板补充" class="headerlink" title="1. 浏览器面板补充"></a>1. 浏览器面板补充</h3><p><a name="Elements"></a></p>
+<h4 id="Elements"><a href="#Elements" class="headerlink" title="Elements"></a>Elements</h4><p><a name="Network"></a></p>
+<h4 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h4><ul>
+<li>保留日志 <ul>
+<li>勾选每次刷新不会清除之前的请求</li>
+</ul>
+</li>
+<li>停用缓存 <ul>
+<li>勾选后不会从缓存里面拉数据，方便后续JS动态调试</li>
+</ul>
+</li>
+</ul>
+<p><a name="Sources"></a></p>
+<h4 id="Sources"><a href="#Sources" class="headerlink" title="Sources"></a>Sources</h4><ul>
+<li><p>page ： 所有资源文件 </p>
+</li>
+<li><p>filesystem： 关联本地文件 </p>
+</li>
+<li><p>overrides：  可以做文件替换，比如替换JS </p>
+</li>
+<li><h2 id="代码段：可以编写脚本，影响页面-代码记录"><a href="#代码段：可以编写脚本，影响页面-代码记录" class="headerlink" title="代码段：可以编写脚本，影响页面,代码记录 "></a>代码段：可以编写脚本，影响页面,代码记录 </h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a =<span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#su&quot;</span>)</span><br><span class="line"><span class="comment">// 可以在控制台操作 输入 a.remove()</span></span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>断点介绍<br />地址：<a target="_blank" rel="noopener" href="https://oauth.d.cn/auth/goLogin.html">https://oauth.d.cn/auth/goLogin.html</a> </p>
+<ul>
+<li>跳过子函数（次态函数）执行（只在主函数内一步一步执行，不进入子函数内部）</li>
+<li>进入子函数（次态函数）执行（在主函数内部一步一步执行，如果遇到子函数，会跳转到子函数内部一步一步执行）</li>
+<li>跳出当前函数，回到调用位置</li>
+<li>单步执行，会进入到函数内部 更加的细致</li>
+<li>屏蔽断点</li>
+</ul>
+</li>
+</ul>
+<p><a name="Application"></a></p>
+<h4 id="Application"><a href="#Application" class="headerlink" title="Application"></a>Application</h4><p><a name="f3d99b33"></a></p>
+<h3 id="2-明确JS逆向目标"><a href="#2-明确JS逆向目标" class="headerlink" title="2 明确JS逆向目标"></a>2 明确JS逆向目标</h3><ul>
+<li>头部签名</li>
+<li>请求体签名</li>
+<li>cookie反爬</li>
+<li>响应数据反爬</li>
+<li>查询参数签名</li>
+</ul>
+<p><a name="02d2ba79"></a></p>
+<h3 id="3-断点讲解"><a href="#3-断点讲解" class="headerlink" title="3 断点讲解"></a>3 断点讲解</h3><p>作用：对数据进行监听，跟值进行分析</p>
+<p><a name="86c84c65"></a></p>
+<h4 id="3-1-什么是断点"><a href="#3-1-什么是断点" class="headerlink" title="3.1 什么是断点"></a>3.1 什么是断点</h4><p><strong>网站运行时间轴</strong></p>
+<p>加载Hmtl - 加载JS - 运行JS初始化 - 用户触发某个事件 - 调用某段JS - 加密函数 - 给服务器发信息（XHR-SEND） - 接收到服务器数据 - 解密函数 - 刷新网页渲染</p>
+<p>示例：<a target="_blank" rel="noopener" href="https://oauth.d.cn/auth/goLogin.html">https://oauth.d.cn/auth/goLogin.html</a></p>
+<p><a name="0f2bd6d6"></a></p>
+<h5 id="3-1-1-DOM事件断点"><a href="#3-1-1-DOM事件断点" class="headerlink" title="3.1.1 DOM事件断点"></a>3.1.1 DOM事件断点</h5><ul>
+<li>执行的比较靠前 距离加密函数比较远</li>
+</ul>
+<p><a name="9b1b0ddc"></a></p>
+<h5 id="3-1-2-XHR断点"><a href="#3-1-2-XHR断点" class="headerlink" title="3.1.2 XHR断点"></a>3.1.2 XHR断点</h5><ul>
+<li>执行比较靠后 距离加密函数相对较近   可以根据栈快速定位<br /><strong>注意</strong>：非XHR发送的就断不住</li>
+</ul>
+<p><a name="088b6d55"></a></p>
+<h3 id="4-方法栈"><a href="#4-方法栈" class="headerlink" title="4 方法栈"></a>4 方法栈</h3><p>栈是一种先进后出的特殊线性表结构</p>
+<p>调用栈是解析器的一种机制，可以在脚本调用多个函数时，跟踪每个函数在完成执行时应该返回控制的点</p>
+<ul>
+<li>当脚本要调用一个函数时，解析器把该函数添加到栈中并且执行这个函数。</li>
+<li>任何被这个函数调用的函数会进一步添加到调用栈中，并且运行到它们被上个程序调用的位置。</li>
+<li>当函数运行结束后，解释器将它从堆栈中取出，并在主代码列表中继续执行代码。</li>
+</ul>
+<p><img src="/images%5Cimage-20220810155355179.png#id=oTLNN&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title="></p>
+<p><a name="2bf49ea4"></a></p>
+<h3 id="5-debug原理"><a href="#5-debug原理" class="headerlink" title="5 debug原理"></a>5 debug原理</h3><p>站点：<a target="_blank" rel="noopener" href="http://cpquery.cnipa.gov.cn/">http://cpquery.cnipa.gov.cn/</a></p>
+<ul>
+<li>无限debbugger不会真正得死循环，而是有规律得执行逻辑，一般用定时器</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Function</span>(<span class="string">&quot;debugger;&quot;</span>).<span class="title function_">call</span>()</span><br></pre></td></tr></table></figure>
+
+<p><a name="22a2209c"></a></p>
+<h4 id="5-1-样例"><a href="#5-1-样例" class="headerlink" title="5.1 样例"></a>5.1 样例</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">id</span>=<span class="string">&quot;box&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> ss = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;box&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">function</span> <span class="title function_">ff</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">debugger</span>;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">    <span class="built_in">setInterval</span>(ff,<span class="number">100</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    ss.<span class="property">innerHTML</span> = <span class="string">&quot;大家晚上好&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><a name="9e542e79"></a></p>
+<h4 id="5-1-1-浏览器过debugger"><a href="#5-1-1-浏览器过debugger" class="headerlink" title="5.1.1 浏览器过debugger"></a>5.1.1 浏览器过debugger</h4><pre><code>1，当定义器运行到这个debugger这个代码的时候，那么这个时候它为true，它肯定执行我们的debugger代码，那我们可以用浏览器的功能给他改成false
+</code></pre>
+<p>2，编辑断点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">写个1===0的先验条件，永远为假，就永远不会进入这个断点了。</span><br></pre></td></tr></table></figure>
+
+<p><a name="42027199"></a></p>
+<h4 id="5-1-2-方法置空"><a href="#5-1-2-方法置空" class="headerlink" title="5.1.2 方法置空"></a>5.1.2 方法置空</h4><p>无限debugger产生的原因是第七行代码<code>ff</code>这个函数造成的,所以我们可以重写这个函数,使无限debugger失效.在控制台中输入<code>function ff()&#123;&#125;</code>即可,如图:</p>
+<p>注：一定要在debugger进入之前</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setInterval_ba = <span class="built_in">setInterval</span></span><br><span class="line"><span class="built_in">setInterval</span> = <span class="keyword">function</span> <span class="title function_">ff</span>(<span class="params"></span>)&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a name="8b323e68"></a></p>
+<h4 id="5-13-过OB混淆debugger"><a href="#5-13-过OB混淆debugger" class="headerlink" title="5.13 过OB混淆debugger"></a>5.13 过OB混淆debugger</h4><p>站点：<a target="_blank" rel="noopener" href="https://bz.zzzmh.cn/index">https://bz.zzzmh.cn/index</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">__constructor_back</span> = <span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">constructor</span>;</span><br><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">constructor</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable language_">arguments</span> &amp;&amp; <span class="keyword">typeof</span> <span class="variable language_">arguments</span>[<span class="number">0</span>]===<span class="string">&#x27;string&#x27;</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;debugger&quot;</span> === <span class="variable language_">arguments</span>[<span class="number">0</span>])&#123;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword">return</span> <span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">__constructor_back</span>.<span class="title function_">apply</span>(<span class="variable language_">this</span>,<span class="variable language_">arguments</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a name="3da81e9a"></a></p>
+<h3 id="6-hook技术"><a href="#6-hook技术" class="headerlink" title="6  hook技术"></a>6  hook技术</h3><p>Hook 是一种钩子技术，在系统没有调用函数之前，钩子程序就先得到控制权，这时钩子函数既可以加工处理（改变）该函数的执行行为，也可以强制结束消息的传递。简单来说，修改原有的 JS 代码就是 Hook。</p>
+<p><strong>Hook 技术之所以能够实现有两个条件：</strong></p>
+<ul>
+<li>客户端拥有 JS 的最高解释权，可以决定在任何时候注入 JS，而服务器无法阻止或干预。服务端只能通过检测和混淆的手段，另 Hook 难度加大，但是无法直接阻止。</li>
+<li>除了上面的必要条件之外，还有一个条件。就是 JS 是一种弱类型语言，同一个变量可以多次定义、根据需要进行不同的赋值，而这种情况如果在其他强类型语言中则可能会报错，导致代码无法执行。js 的这种特性，为我们 Hook 代码提供了便利。</li>
+</ul>
+<p><strong>注意：</strong>JS 变量是有作用域的，只有当被 hook 函数和 debugger 断点在同一个作用域的时候，才能 hook 成功。</p>
+<p><a name="0c679fe9"></a></p>
+<h4 id="6-1-Hook步骤："><a href="#6-1-Hook步骤：" class="headerlink" title="6.1 Hook步骤："></a>6.1 <em>Hook步骤：</em></h4><ul>
+<li>1。寻找hook的点 </li>
+<li>2。编写hook逻辑 </li>
+<li>3。调试</li>
+</ul>
+<p><strong>注</strong>：最常用的是<code>hook cookie</code></p>
+<p><a name="66c9e52e"></a></p>
+<h4 id="6-2-HOOK-cookie操作"><a href="#6-2-HOOK-cookie操作" class="headerlink" title="6.2 HOOK cookie操作"></a>6.2 HOOK cookie操作</h4><p>WEBAPI地址：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API">https://developer.mozilla.org/zh-CN/docs/Web/API</a></p>
+<p><code>Object.defineProperty</code>为对象的属性赋值，替换对象属性</p>
+<p>基本语法：<code>Object.defineProperty(obj, prop, descriptor)</code>，它的作用就是直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，接收的三个参数含义如下：</p>
+<ul>
+<li><code>obj</code>：需要定义属性的当前对象； </li>
+<li><code>prop</code>：当前需要定义的属性名；</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(user,<span class="string">&quot;age&quot;</span>,&#123;</span><br><span class="line"> <span class="attr">get</span>:<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;这个人来获取值了！！&quot;</span>);</span><br><span class="line">      <span class="keyword">return</span> count;</span><br><span class="line"> &#125;,</span><br><span class="line">    </span><br><span class="line"> <span class="attr">set</span>:<span class="keyword">function</span>(<span class="params">newVal</span>)&#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;这个人来设置值了！！&quot;</span>);</span><br><span class="line">      count=newVal+<span class="number">1</span>;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>cookie 示范</strong></p>
+<p>示范例子：<a target="_blank" rel="noopener" href="http://q.10jqka.com.cn/">http://q.10jqka.com.cn/</a></p>
+<p>cookie 钩子用于定位 cookie 中关键参数生成位置，以下代码演示了当 cookie 中匹配到了 <code>v</code>， 则插入断点：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> cookieTemp = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(<span class="variable language_">document</span>, <span class="string">&#x27;cookie&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">set</span>: <span class="keyword">function</span> (<span class="params">val</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (val.<span class="title function_">indexOf</span>(<span class="string">&#x27;v&#x27;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">debugger</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Hook捕获到cookie设置-&gt;&#x27;</span>, val);</span><br><span class="line">      cookieTemp = val;</span><br><span class="line">      <span class="keyword">return</span> val;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">get</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> cookieTemp;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>注：正常<code>hook cookie</code>操作的时候需要清除下<code>cookie</code></p>
+<p><a name="6c6e68f0"></a></p>
+<h4 id="6-3-hook-方法"><a href="#6-3-hook-方法" class="headerlink" title="6.3 hook 方法"></a>6.3 hook 方法</h4><p>站点：<a target="_blank" rel="noopener" href="https://www.wcbchina.com/login/login.html">https://www.wcbchina.com/login/login.html</a></p>
+<p>我们知道在 JavaScript 中 <code>JSON.stringify()</code> 方法用于将 JavaScript 对象或值转换为 JSON 字符串，<code>JSON.parse()</code> 方法用于将一个 JSON 字符串转换为 JavaScript 对象，某些站点在向 web 服务器传输用户名密码时，会用到这两个方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> stringify = <span class="title class_">JSON</span>.<span class="property">stringify</span>;</span><br><span class="line">    <span class="title class_">JSON</span>.<span class="property">stringify</span> = <span class="keyword">function</span>(<span class="params">params</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hook JSON.stringify ——&gt; &quot;</span>, params);</span><br><span class="line">        <span class="keyword">debugger</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">stringify</span>(params);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>首先定义了一个变量 <code>stringify</code> 保留原始 <code>JSON.stringify</code> 方法，然后重写 <code>JSON.stringify</code> 方法，遇到 <code>JSON.stringify</code> 方法就会执行 debugger 语句，会立即断下，最后将接收到的参数返回给原始的 <code>JSON.stringify</code> 方法进行处理，确保数据正常传输</p>
+<p><a name="b3f529ee"></a></p>
+<h4 id="6-4-hook-XHR请求"><a href="#6-4-hook-XHR请求" class="headerlink" title="6.4 hook  XHR请求"></a>6.4 hook  XHR请求</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> open = <span class="variable language_">window</span>.<span class="property">XMLHttpRequest</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">open</span>;</span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">XMLHttpRequest</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">open</span> = <span class="keyword">function</span> (<span class="params">method, url, <span class="keyword">async</span></span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (url.<span class="title function_">indexOf</span>(<span class="string">&quot;analysis&quot;</span>) != <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">debugger</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> open.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>定义了一个变量 <code>open</code> 保留原始 <code>XMLHttpRequest.open</code> 方法，然后重写 <code>XMLHttpRequest.open</code> 方法，判断如果 rnd 字符串值在 URL 里首次出现的位置不为 -1，即 URL 里包含 <code>analysis</code>字符串，则执行 <code>debugger</code> 语句，会立即断下。</p>
+<p><a name="65b94542"></a></p>
+<h3 id="7-python执行JS的方式"><a href="#7-python执行JS的方式" class="headerlink" title="7 python执行JS的方式"></a>7 python执行JS的方式</h3><p><a name="9f149465"></a></p>
+<h5 id="7-1-PyExecJS"><a href="#7-1-PyExecJS" class="headerlink" title="7.1 PyExecJS"></a>7.1 PyExecJS</h5><p>地址;<a target="_blank" rel="noopener" href="https://github.com/doloopwhile/PyExecJS">https://github.com/doloopwhile/PyExecJS</a></p>
+<p>PyExecJS 是使用最多的一种方式，底层实现方式是：在本地 JS 环境下运行 JS 代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install PyExecJS</span><br></pre></td></tr></table></figure>
+
+<p>7.1.1 读取JS代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(file_name, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;UTF-8&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">	result = file.read()</span><br></pre></td></tr></table></figure>
+
+<p>7.1.2 execjs 类的compile()方法编译加载上面的 JS 字符串，返回一个上下文对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context1 = execjs.<span class="built_in">compile</span>(<span class="string">&quot;这里面是JS代码&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>7.1.3 调用上下文对象的call() 方法执行 JS 方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result1 = context1.call(<span class="string">&quot;函数&quot;</span>, <span class="string">&quot;参数1&quot;</span>, <span class="string">&quot;参数2&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的，由于 PyExecJS 运行在本地 JS 环境下，使用之前会启动 JS 环境，最终导致运行速度会偏慢</p>
+<p>7.1.4 eval执行</p>
+<p>eval() 函数计算 JavaScript 字符串，并把它作为脚本代码来执行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">print</span>(execjs.<span class="built_in">eval</span>(<span class="string">&#x27;Date.now()&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p><a name="3266c63d"></a></p>
+<h3 id="8-浏览器环境补充方法"><a href="#8-浏览器环境补充方法" class="headerlink" title="8 浏览器环境补充方法"></a>8 浏览器环境补充方法</h3><p><a target="_blank" rel="noopener" href="https://www.runoob.com/jsref/obj-window.html">https://www.runoob.com/jsref/obj-window.html</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">document</span> = &#123;</span><br><span class="line">    <span class="attr">cookie</span>:<span class="string">&#x27;uuid_tt_dd=10_29360271920-1658044222535-945484; __gads=ID=5b925b796ab29466-22740a5938d50041:T=1658044224:RT=1658044224:S=ALNI_MYZZ3qnATdjgh4YHRlZaBk3TnwTFw; p_uid=U010000&#x27;</span>,</span><br><span class="line">    location : &#123;</span><br><span class="line">        <span class="attr">href</span>:<span class="string">&#x27;https://www.baidu.com/s?ie=utf-8&amp;f=8&amp;rsv_bp=1&amp;rsv_idx=1&amp;tn=87135040_oem_dg&amp;wd=eval%20JS%20&amp;fenlei=256&amp;oq=eval&amp;rsv_pq=e1b3f2520003297e&amp;rsv_t=7e58%2ByqRgVEysyNAVRctyGmKUct9An%2B6da7wzdVJDXgo7qaAS1DKyn86mLazGA1IqBPpY359&amp;rqlang=cn&amp;rsv_dl=tb&amp;rsv_enter=1&amp;rsv_btype=t&amp;inputT=860&amp;rsv_sug3=56&amp;rsv_sug1=35&amp;rsv_sug7=100&amp;rsv_sug2=0&amp;rsv_sug4=1037&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">navigator = &#123;<span class="attr">userAgent</span>:<span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">window</span> = &#123;</span><br><span class="line">    <span class="variable language_">document</span> : <span class="variable language_">document</span>,</span><br><span class="line">    <span class="attr">navigator</span>:navigator</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">location</span>.<span class="property">href</span>);</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">getElementsByTagName</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">Gayle Mood</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2023/07/03/10-javascript%E5%8E%9F%E7%90%86/">http://example.com/2023/07/03/10-javascript%E5%8E%9F%E7%90%86/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a></div><div class="post_share"><div class="social-share" data-image="/img/head_photo.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/07/03/9-JS%E5%9F%BA%E7%A1%80/" title="9-JS基础"><img class="cover" src="/img/head_photo.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">9-JS基础</div></div></a></div><div class="next-post pull-right"><a href="/2023/07/03/11-%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" title="11-哈希算法"><img class="cover" src="/img/head_photo.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">11-哈希算法</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/07/03/1-%E7%88%AC%E8%99%AB%E5%8E%9F%E7%90%86/" title="1-爬虫原理"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">1-爬虫原理</div></div></a></div><div><a href="/2023/07/03/2-HHTP%E8%AF%B7%E6%B1%82%E6%A8%A1%E5%9D%97/" title="2-HTTP请求模块"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">2-HTTP请求模块</div></div></a></div><div><a href="/2023/07/03/3-%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" title="3-数据解析"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">3-数据解析</div></div></a></div><div><a href="/2023/07/03/4-%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" title="4-数据存储"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">4-数据存储</div></div></a></div><div><a href="/2023/07/03/5-ajax%E5%8A%A8%E6%80%81%E9%87%87%E9%9B%86/" title="5-ajax动态采集"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">5-ajax动态采集</div></div></a></div><div><a href="/2023/07/03/6-%E5%A4%9A%E4%BB%BB%E5%8A%A1%E6%8F%90%E9%80%9F/" title="6-多任务提速"><img class="cover" src="/img/head_photo.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">6-多任务提速</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/myself_image.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Gayle Mood</div><div class="author-info__description">Python练习生（练习时长一年半）</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">29</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/clkyyds"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://res.abeim.cn/api/qq/?qq=1269041573" target="_blank" title="icon-QQ"><i class="fab fa-qq" style="color: faa-tada;"></i></a><a class="social-icon" href="mailto:1269041573@qq.com" target="_blank" title="icon-youxiang"><i class="fas fa-envelope" style="color: faa-tada;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#javascript%E8%B0%83%E8%AF%95"><span class="toc-number">1.</span> <span class="toc-text">javascript调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%9D%A2%E6%9D%BF%E8%A1%A5%E5%85%85"><span class="toc-number">1.1.</span> <span class="toc-text">1. 浏览器面板补充</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Elements"><span class="toc-number">1.1.1.</span> <span class="toc-text">Elements</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Network"><span class="toc-number">1.1.2.</span> <span class="toc-text">Network</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sources"><span class="toc-number">1.1.3.</span> <span class="toc-text">Sources</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E6%AE%B5%EF%BC%9A%E5%8F%AF%E4%BB%A5%E7%BC%96%E5%86%99%E8%84%9A%E6%9C%AC%EF%BC%8C%E5%BD%B1%E5%93%8D%E9%A1%B5%E9%9D%A2-%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95"><span class="toc-number">2.</span> <span class="toc-text">代码段：可以编写脚本，影响页面,代码记录 </span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Application"><span class="toc-number">2.0.1.</span> <span class="toc-text">Application</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%98%8E%E7%A1%AEJS%E9%80%86%E5%90%91%E7%9B%AE%E6%A0%87"><span class="toc-number">2.1.</span> <span class="toc-text">2 明确JS逆向目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%96%AD%E7%82%B9%E8%AE%B2%E8%A7%A3"><span class="toc-number">2.2.</span> <span class="toc-text">3 断点讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E4%BB%80%E4%B9%88%E6%98%AF%E6%96%AD%E7%82%B9"><span class="toc-number">2.2.1.</span> <span class="toc-text">3.1 什么是断点</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-1-DOM%E4%BA%8B%E4%BB%B6%E6%96%AD%E7%82%B9"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">3.1.1 DOM事件断点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-2-XHR%E6%96%AD%E7%82%B9"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">3.1.2 XHR断点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-number">2.3.</span> <span class="toc-text">4 方法栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-debug%E5%8E%9F%E7%90%86"><span class="toc-number">2.4.</span> <span class="toc-text">5 debug原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-%E6%A0%B7%E4%BE%8B"><span class="toc-number">2.4.1.</span> <span class="toc-text">5.1 样例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-1-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BF%87debugger"><span class="toc-number">2.4.2.</span> <span class="toc-text">5.1.1 浏览器过debugger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-2-%E6%96%B9%E6%B3%95%E7%BD%AE%E7%A9%BA"><span class="toc-number">2.4.3.</span> <span class="toc-text">5.1.2 方法置空</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-13-%E8%BF%87OB%E6%B7%B7%E6%B7%86debugger"><span class="toc-number">2.4.4.</span> <span class="toc-text">5.13 过OB混淆debugger</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-hook%E6%8A%80%E6%9C%AF"><span class="toc-number">2.5.</span> <span class="toc-text">6  hook技术</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-Hook%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">2.5.1.</span> <span class="toc-text">6.1 Hook步骤：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-HOOK-cookie%E6%93%8D%E4%BD%9C"><span class="toc-number">2.5.2.</span> <span class="toc-text">6.2 HOOK cookie操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-3-hook-%E6%96%B9%E6%B3%95"><span class="toc-number">2.5.3.</span> <span class="toc-text">6.3 hook 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-hook-XHR%E8%AF%B7%E6%B1%82"><span class="toc-number">2.5.4.</span> <span class="toc-text">6.4 hook  XHR请求</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-python%E6%89%A7%E8%A1%8CJS%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">2.6.</span> <span class="toc-text">7 python执行JS的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#7-1-PyExecJS"><span class="toc-number">2.6.0.1.</span> <span class="toc-text">7.1 PyExecJS</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E6%B5%8F%E8%A7%88%E5%99%A8%E7%8E%AF%E5%A2%83%E8%A1%A5%E5%85%85%E6%96%B9%E6%B3%95"><span class="toc-number">2.7.</span> <span class="toc-text">8 浏览器环境补充方法</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/Apple%20%E7%BE%8E%E5%8C%BA%E8%B4%A6%E5%8F%B7%E6%B3%A8%E5%86%8C/" title="Apple 美区账号注册"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Apple 美区账号注册"/></a><div class="content"><a class="title" href="/2023/07/03/Apple%20%E7%BE%8E%E5%8C%BA%E8%B4%A6%E5%8F%B7%E6%B3%A8%E5%86%8C/" title="Apple 美区账号注册">Apple 美区账号注册</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/Butterfly/" title="Butterfly"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Butterfly"/></a><div class="content"><a class="title" href="/2023/07/03/Butterfly/" title="Butterfly">Butterfly</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/" title="hexo + github 搭建博客网站"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hexo + github 搭建博客网站"/></a><div class="content"><a class="title" href="/2023/07/03/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/" title="hexo + github 搭建博客网站">hexo + github 搭建博客网站</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/1-%E7%88%AC%E8%99%AB%E5%8E%9F%E7%90%86/" title="1-爬虫原理"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="1-爬虫原理"/></a><div class="content"><a class="title" href="/2023/07/03/1-%E7%88%AC%E8%99%AB%E5%8E%9F%E7%90%86/" title="1-爬虫原理">1-爬虫原理</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/2-HHTP%E8%AF%B7%E6%B1%82%E6%A8%A1%E5%9D%97/" title="2-HTTP请求模块"><img src="/img/head_photo.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2-HTTP请求模块"/></a><div class="content"><a class="title" href="/2023/07/03/2-HHTP%E8%AF%B7%E6%B1%82%E6%A8%A1%E5%9D%97/" title="2-HTTP请求模块">2-HTTP请求模块</a><time datetime="2023-07-02T16:00:00.000Z" title="Created 2023-07-03 00:00:00">2023-07-03</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/head_photo.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Gayle Mood</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
